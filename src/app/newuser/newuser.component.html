@@ -1,0 +1,122 @@
+<div class="container padding">
+    <h1>Create a User</h1>
+    <form [formGroup]="form">
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="firstname" required/>
+                    <mat-error *ngIf="form.get('firstname')?.errors?.['required']">First name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="lastname" required/>
+                    <mat-error *ngIf="form.get('lastname')?.errors?.['required']">Last name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" required/>
+                    <mat-error *ngIf="form.get('email')?.invalid">{{getEmailErrorValidator()}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Phone</mat-label>
+                    <input matInput formControlName="phone" required/>
+                    <mat-error *ngIf="form.get('phone')?.errors?.['required']">Phone is required</mat-error>
+                    <mat-error *ngIf="form.get('phone')?.errors?.['pattern']">Please enter a 10-digit mobile number</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status" required>
+                        <mat-option value="pending">Pending</mat-option>
+                        <mat-option value="approved">Approved</mat-option>
+                        <mat-option value="rejected">Rejected</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('status')?.errors?.['required']">Status is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <!--Address Form-->
+        <div formGroupName = "address">
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Country</mat-label>
+                        <mat-select formControlName="country" required>
+                            <mat-option value="Philippines">Philippines</mat-option>
+                            <mat-option value="Australia">Australia</mat-option>
+                            <mat-option value="New Zealand">New Zealand</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('country')?.errors?.['required']">Country is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>City</mat-label>
+                        <mat-select formControlName="city" required>
+                            <mat-option value="Manila">Manila City</mat-option>
+                            <mat-option value="Pasig City">Pasig City</mat-option>
+                            <mat-option value="Quezon City">Quezon City</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('city')?.errors?.['required']">City is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>State</mat-label>
+                        <mat-select formControlName="state" required>
+                            <mat-option value="Metro Manila">Metro Manila</mat-option>
+                            <mat-option value="Cavite">Cavite</mat-option>
+                            <mat-option value="Laguna">Laguna</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('state')?.errors?.['required']">State is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <!--End of Address Form-->
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dateofbirth">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="form.get('dateofbirth')?.errors?.['required']">Date of Birth is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required >
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="form.get('password')?.errors?.['required']">Password is required</mat-error>
+                    <mat-error *ngIf="form.get('password')?.errors?.['pattern']">Must contain more than 8 characters, one number, 1 upper case letter and 1 special character</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput [type]="hideconfirm ? 'password' : 'text'" formControlName="confirm_password" required >
+                    <button mat-icon-button matSuffix (click)="hideconfirm = !hideconfirm" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideconfirm">
+                        <mat-icon>{{hideconfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-error style="font-size: 12px; margin-top: -22px; margin-left: 18px;" *ngIf="form?.errors?.['mismatch'] && form?.touched">Password Mismatch</mat-error>
+                
+            </div>
+        </div>
+        <button *ngIf="!disabledRegister" mat-raised-button color="primary" class="registerbutton btn btn-primary btn-lg" (click)="OnSubmit()" >Sign up</button>
+        <button *ngIf="!disabledUpdate" mat-raised-button color="primary" class="registerbutton btn btn-primary btn-lg" (click)="UpdateUser()">Update</button>
+    </form>
+  </div>
